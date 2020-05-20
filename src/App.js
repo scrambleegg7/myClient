@@ -36,6 +36,7 @@ const handleResponse = (response ) => {
     return response.text()
     .then( (text) => {
 
+        console.log("handleResponse (text) : ---> ", text)
 
         const data = text && JSON.parse(text);
 
@@ -70,8 +71,9 @@ class App extends Component {
 
     handleFetchData = () => {
 
+        console.log(getCourseOptions())
 
-        fetch("http://localhost:8080/course", getCourseOptions())
+        fetch("/course", getCourseOptions())
         .then(handleResponse)
         .then( (data) => {
             console.log("getPosts (course) ", data.courses)
