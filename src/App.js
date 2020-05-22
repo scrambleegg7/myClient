@@ -5,6 +5,10 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 
 const styles = (theme) => ({
     root: {
@@ -14,8 +18,13 @@ const styles = (theme) => ({
     },
     grid_root: {
         flexGrow: 1,
-      },
-     
+    },
+    
+    list_root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
 });
 
 const getCourseOptions = () => {
@@ -64,16 +73,26 @@ class App extends Component {
         super();
 
         this.state = {
-            data: []
+            data: [],
+            passwords: []
         }
     }
 
-
+    getPasswords = () => {
+        // Get the passwords and store them in state
+        fetch(`${process.env.REACT_APP_API_URL}/passwords`)
+          .then(res => res.json())
+          .then(passwords => this.setState({ passwords }));
+    }
+    
     handleFetchData = () => {
 
         console.log(getCourseOptions())
 
-        fetch("/course", getCourseOptions())
+
+        fetch(`${process.env.REACT_APP_API_URL}/course`, getCourseOptions())
+        //fetch(`/course`, getCourseOptions())
+
         .then(handleResponse)
         .then( (data) => {
             console.log("getPosts (course) ", data.courses)
@@ -126,20 +145,20 @@ class App extends Component {
 
                 <Grid item xs={12}>
                     <Grid container justify="center" spacing={1}>
-                        
+                        <List className={classes.list_root} >
                             {this.state.data ? this.state.data.map(res => (
                                 
                                 
-                                <Grid item key={res._id}>
+                                <ListItem item key={res._id}>
         
-                                {res._id}
-                            
-                                </Grid>
-                            
+                                    {res._id}
+                                
+                                </ListItem>
+                                
                                                         )                            
                             )
                              : ""}
-
+                        </List>
                     </Grid>
                 </Grid>
 
